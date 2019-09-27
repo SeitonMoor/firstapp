@@ -12,7 +12,7 @@ public class MainApp {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
-            System.out.println("Введите одну из команд - (list phone | list profit | add phone | buy phone | profit all | profit phone | exit): ");
+            System.out.println("Введите одну из команд - (list phone | list profit | add phone | buy phone | profit all | profit date | profit phone | delete | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
 
             if (params.length < 1 || params.length > 2) {
@@ -35,6 +35,9 @@ public class MainApp {
                     break;
                 case "profit":
                     storage.saleReport(name);
+                    break;
+                case "delete":
+                    storage.delete(name);
                     break;
                 case "exit":
                     return;
