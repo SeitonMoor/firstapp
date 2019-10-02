@@ -101,15 +101,10 @@ public class Storage {
 
                 insertPhoneSQL(profitPhone, "profitList");
 
-                DateFormat formatD = new SimpleDateFormat("yyyy:MM:dd");
-                DateFormat formatT = new SimpleDateFormat("HH:mm:ss");
+                DateFormat formatD = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss");
                 String date = formatD.format(new Date());
-                String time = formatT.format(new Date());
                 stmt().executeUpdate(
                         "UPDATE profitList SET date =  '" + date +"' WHERE name = '" + name + "' AND date IS NULL"
-                );
-                stmt().executeUpdate(
-                        "UPDATE profitList SET time =  '" + time +"' WHERE name = '" + name + "' AND time IS NULL"
                 );
                 stmt().executeUpdate(
                         "UPDATE profitList SET total =  " + profitPhone.getAmount() * profitPhone.getPrice() + " WHERE total IS NULL"
@@ -144,7 +139,7 @@ public class Storage {
             String dTo = reader.readLine();
             try {
                 ResultSet rsProfit = stmt().executeQuery(
-                        "SELECT SUM(total) FROM profitList WHERE date BETWEEN '" + dFrom +"' and '" + dTo + "'"
+                        "SELECT SUM(total) FROM profitList WHERE date BETWEEN '" + dFrom + "_00:00:00' and '" + dTo + "_23:59:59'"
                 );
                 System.out.println("Прибыль магазина в период " + dFrom + " - " + dTo + " составляет: " + rsProfit.getInt(1));
             } catch (SQLException e) {

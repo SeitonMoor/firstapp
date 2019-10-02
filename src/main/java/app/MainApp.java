@@ -6,13 +6,20 @@ import java.io.InputStreamReader;
 
 public class MainApp {
     private final static Storage storage = new Storage();
+    private final static Login login = new Login();
 
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        while (true) {
-            System.out.println("Введите одну из команд - (list phone | list profit | add phone | buy phone | profit all | profit date | profit phone | delete | exit): ");
+        while (login.getAccess() == null) {
+            login.login();
+            System.out.println(login.getAccess());
+        }
+
+        while (login.getAccess().equals("admin")) {
+            //list phone | list profit
+            System.out.println("Введите одну из команд - (add phone | buy phone | profit all | profit date | profit phone | delete | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
 
             if (params.length < 1 || params.length > 2) {
@@ -24,9 +31,11 @@ public class MainApp {
                 name = params[1].intern();
             }
             switch (params[0]) {
+                /*
                 case "list":
                     printAll(name);
                     break;
+                 */
                 case "add":
                     storage.newProduct(name);
                     break;
@@ -38,6 +47,33 @@ public class MainApp {
                     break;
                 case "delete":
                     storage.delete(name);
+                    break;
+                case "exit":
+                    return;
+                default:
+                    System.out.println("Неверная команда.");
+                    break;
+            }
+        }
+
+        while (login.getAccess().equals("user")) {
+            System.out.println("Введите одну из команд - (buy phone | profit all | profit date | profit phone | exit): ");
+            String[] params = reader.readLine().trim().toLowerCase().split(" ");
+
+            if (params.length < 1 || params.length > 2) {
+                System.out.println("Неверная команда.");
+                continue;
+            }
+            String name = null;
+            if (params.length == 2) {
+                name = params[1].intern();
+            }
+            switch (params[0]) {
+                case "buy":
+                    storage.purchase(name);
+                    break;
+                case "profit":
+                    storage.saleReport(name);
                     break;
                 case "exit":
                     return;
